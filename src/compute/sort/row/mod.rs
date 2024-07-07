@@ -269,7 +269,8 @@ impl Rows {
     }
 
     /// Get a reference to a certain row but not check the bounds.
-    pub fn row_unchecked(&self, row: usize) -> Row<'_> {
+    pub unsafe fn row_unchecked(&self, row: usize) -> Row<'_> {
+        debug_assert!(row < self.offsets.len(), "out of bounds");
         let data = unsafe {
             let end = *self.offsets.get_unchecked(row + 1);
             let start = *self.offsets.get_unchecked(row);
